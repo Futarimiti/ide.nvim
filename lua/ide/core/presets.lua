@@ -5,6 +5,30 @@ local classname = function (buf_id) return vim.api.nvim_buf_call(buf_id, functio
 
 local M = {}
 
+local python_with_version = function (v)
+    return { build = 'python' .. v .. ' -m py_compile %s'
+           , interpret = 'python' .. v .. ' %s'
+           , debug = 'python' .. v .. ' -m pdb %s'
+           , repl = 'python' .. v
+           , repl_loaded = 'python' .. v .. ' -i %s'
+           }
+end
+
+-- You can also pass in a number or a string, e.g. 3.12 or '3.12'
+-- as the version of python you want to use,
+-- using metatable magic.
+-- example: python(3.12) --> { build = 'python3.12 -m py_compile %s', ... }
+---@type preset
+M.python = python_with_version ''
+
+setmetatable(M.python, { __call = python_with_version })
+
+M.lua = { interpret = 'lua %s'
+        , build = function (id) return 'luac -o ' .. classname(id) .. ' %s' end
+        , repl = 'lua'
+        , repl_loaded = 'lua -i %s'
+        }
+
 -- single java file
 ---@type preset
 M.java = { build = 'javac %s'

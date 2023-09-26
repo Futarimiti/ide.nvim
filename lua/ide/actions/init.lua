@@ -1,5 +1,4 @@
 local A = require 'ide.core.action.actions'
-local AS = require 'ide.core.action.actions-set'
 local L = require 'ide.core.lib'
 
 -- Perform a general action for the given buffer.
@@ -13,8 +12,8 @@ local general_action = function (buf_id, action, mode, actions_set)
     ---@type ft
     local ft = vim.api.nvim_buf_get_option(buf_id, 'filetype')
 
-    local to_do = actions_set[mode][ft][action]
-    if to_do == nil then
+    local ok, to_do = pcall(function (a) return a[mode][ft][action] end, actions_set)
+    if not ok then
         error('[ide] An error raised in querying action: cannot find the *' .. tostring(action) .. '* action for filetype *' .. tostring(ft) .. '*')
     end
 
@@ -37,7 +36,10 @@ for a, _ in pairs(A.action) do
     end
 end
 
--- TODO: setup command
+-- global var again
+---@type buf-id[]
+local last_bufs = {}
+
 M.setup_command = function (cmd_name, actions_set)
     local f = function (opts)
         ---@type string[]
@@ -49,7 +51,13 @@ M.setup_command = function (cmd_name, actions_set)
             error('[ide] An error raised in parsing command *' .. tostring(cmd_name) .. '*: cannot find the *' .. tostring(action) .. '* action')
         end
 
-        local res = action_fun(mode, actions_set)
+        -- first delete buffers (if they exist) opened by the last action
+        for _, buf in pairs(last_bufs) do
+            if vim.api.nvim_buf_is_loaded(buf) then vim.api.nvim_buf_delete(buf, { force = true }) end
+        end
+
+        -- then perform the action and update last_bufs
+        last_bufs = action_fun(mode, actions_set)
     end
 
     local opts = { nargs = '+' }

@@ -32,6 +32,7 @@ M.from_user = function (user)
             vim.cmd.vsplit()
             local win = vim.api.nvim_get_current_win()
             vim.api.nvim_win_set_buf(win, new_buf)
+            vim.cmd.startinsert()
             return { new_buf }
         end
     end

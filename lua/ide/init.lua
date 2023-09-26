@@ -6,7 +6,7 @@ local Opts = require 'ide.opts'
 
 local cmd_name = 'IDE'
 
--- global variable
+-- I HATE GLOBAL VARIABLES
 local global_actions_set = ASet.empty
 
 ---@param opts opts
@@ -16,7 +16,7 @@ M.setup = function (opts)
     local normal_actions_set = ASet.from_user(user_actions_set)
     global_actions_set = vim.tbl_deep_extend('keep', normal_actions_set, global_actions_set)
 
-    -- setup command
+    -- setup command & update global last_bufs
     local has_command = (vim.api.nvim_get_commands { builtin = false })[cmd_name] ~= nil
     if has_command then vim.api.nvim_del_user_command(cmd_name) end
     A.setup_command(cmd_name, global_actions_set)
