@@ -1,0 +1,3 @@
+---@alias ft string
+---@alias shell-command string
+---@alias buf-id integer
