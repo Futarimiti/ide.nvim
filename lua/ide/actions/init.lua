@@ -12,6 +12,10 @@ local general_action = function (buf_id, action, mode, actions_set)
     ---@type ft
     local ft = vim.api.nvim_buf_get_option(buf_id, 'filetype')
 
+    if ft == '' then
+        error('[ide] An error raised in detecting filetype: fail to detect filetype for buffer *' .. tostring(buf_id) .. '*. Maybe manually set one?')
+    end
+
     local ok, to_do = pcall(function (a) return a[mode][ft][action] end, actions_set)
     if not ok then
         error('[ide] An error raised in querying action: cannot find the *' .. tostring(action) .. '* action for filetype *' .. tostring(ft) .. '*')
