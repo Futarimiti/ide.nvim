@@ -19,7 +19,7 @@ M.setup = function (opts)
     -- setup command
     local has_command = (vim.api.nvim_get_commands { builtin = false })[cmd_name] ~= nil
     if has_command then vim.api.nvim_del_user_command(cmd_name) end
-    A.setup_command(cmd_name)
+    A.setup_command(cmd_name, global_actions_set)
 end
 
 return M

@@ -30,16 +30,26 @@ end
 local M = {}
 
 for a, _ in pairs(A.action) do
-    M[a] = function (m)
+    ---@param m mode
+    M[a] = function (m, actions_set)
         local buf_id = vim.api.nvim_get_current_buf()
-        return general_action(buf_id, a, m, AS.get_actions_set())
+        return general_action(buf_id, a, m, actions_set)
     end
 end
 
 -- TODO: setup command
-M.setup_command = function (cmd_name)
+M.setup_command = function (cmd_name, actions_set)
     local f = function (opts)
-        print '[ide] Commands not yet supported'
+        ---@type string[]
+        local args = opts.fargs
+        local action = args[1]
+        local mode = args[2]
+        local action_fun = M[action]
+        if action_fun == nil then
+            error('[ide] An error raised in parsing command *' .. tostring(cmd_name) .. '*: cannot find the *' .. tostring(action) .. '* action')
+        end
+
+        local res = action_fun(mode, actions_set)
     end
 
     local opts = { nargs = '+' }
