@@ -18,7 +18,7 @@ local general_action = function (buf_id, action, mode, actions_set)
 
     local ok, to_do = pcall(function (a) return a[mode][ft][action] end, actions_set)
     if not ok then
-        error('[ide] An error raised in querying action: cannot find the *' .. tostring(action) .. '* action for filetype *' .. tostring(ft) .. '*')
+        error('[ide] An error raised in querying action: cannot find the *' .. tostring(action) .. '* action for filetype *' .. tostring(ft) .. '*, error message: ' .. to_do)
     end
 
     if should_save then L.silent_write_buffer(buf_id) end

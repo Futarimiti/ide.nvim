@@ -5,7 +5,34 @@ local classname = function (buf_id) return vim.api.nvim_buf_call(buf_id, functio
 
 local M = {}
 
-local python_with_version = function (_, ver)
+M.racket = { interpret = 'racket %s'
+           , repl = 'racket'
+           , repl_loaded = function (this, new)
+                               -- not understanding what's exactly a module-path, but using the tail seems to work
+                               local filetail = vim.api.nvim_buf_call(this, function () return vim.fn.expand '%:p:t' end)
+                               local basedir = vim.api.nvim_buf_call(this, function () return vim.fn.expand '%:p:h:S' end)
+                               vim.api.nvim_buf_call(new, function ()
+                                                              vim.fn.termopen('cd '.. basedir .. '; racket')
+                                                              vim.cmd.startinsert()
+                                                              vim.api.nvim_input('(enter! "' .. filetail .. '")<CR>')
+                                                          end)
+                           end
+           }
+
+M.idris = { repl = 'idris'
+          , repl_loaded = 'idris %s'
+          }
+
+M.idris2 = { repl = 'idris2'
+           , repl_loaded = 'idris2 %s'
+           }
+
+M.ptpython = { interpret = 'ptpython %s'
+             , repl = 'ptpython'
+             , repl_loaded = 'ptpython -i %s'
+             }
+
+local python_with_version = function (ver)
     local v = ver and tostring(ver) or ''
     return { interpret = 'python' .. v .. ' %s'
            , debug = 'python' .. v .. ' -m pdb %s'
@@ -21,7 +48,7 @@ end
 ---@type preset
 M.python = python_with_version ''
 
-setmetatable(M.python, { __call = python_with_version })
+setmetatable(M.python, { __call = function (_, ver) return python_with_version(ver) end })
 
 M.lua = { interpret = 'lua %s'
         , build = function (id) return 'luac -o ' .. classname(id) .. ' %s' end

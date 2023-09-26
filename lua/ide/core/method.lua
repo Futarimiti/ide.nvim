@@ -10,11 +10,14 @@
 -- It can be one of the following:
 -- 1. a shell command. `'%s'` may be added to substitute for filename.
 -- 2. a recipe for a shell command, given the buffer handle. `'%s'` will be interpolated.
--- 3. a method
+-- 3. a function that accepts a buffer id for the current buffer 
+--    and another buffer id for the one to be opened in the new window,
+--    specify what to be done on the new buffer.
+--    Useful for functions like `feedkeys`.
 ---@alias user-method 
 ---| shell-command 
 ---| (fun(id: buf-id): shell-command) 
----| method
+---| (fun(this: buf-id, new: buf-id))
 
 local M = {}
 
@@ -22,6 +25,15 @@ local M = {}
 ---@param user user-method
 ---@return method
 M.from_user = function (user)
+    ---@return win-id
+    local new_vsplit = function ()
+        vim.cmd.vsplit()
+        local win = vim.api.nvim_get_current_win()
+        vim.api.nvim_win_set_option(win, 'number', false)
+        vim.api.nvim_win_set_option(win, 'relativenumber', false)
+        return win
+    end
+
     ---@param str string
     local vsplit_term_buf = function (str)
         return function (buf_id)
@@ -29,12 +41,10 @@ M.from_user = function (user)
             local formatted = string.format(str, filename)
             local new_buf = vim.api.nvim_create_buf(true, true)
             vim.api.nvim_buf_call(new_buf, function () vim.fn.termopen(formatted) end)
-            vim.cmd.vsplit()
-            local win = vim.api.nvim_get_current_win()
-            vim.api.nvim_win_set_option(win, 'number', false)
-            vim.api.nvim_win_set_option(win, 'relativenumber', false)
+            local win = new_vsplit()
             vim.api.nvim_win_set_buf(win, new_buf)
-            vim.cmd.startinsert()
+            vim.api.nvim_win_call(win, function () vim.cmd.startinsert() end)
+            vim.api.nvim_buf_set_name(new_buf, 'IDE')
             return { new_buf }
         end
     end
@@ -43,13 +53,19 @@ M.from_user = function (user)
         return vsplit_term_buf(user)
     end
 
-    -- inspect return type
-    return function (buf_id)
-        local ret = user(buf_id)
-        if type(ret) == 'string' then
-            return vsplit_term_buf(ret)(buf_id)
+    -- inspect return type: nil or string
+    return function (buf_id)  -- current buffer
+        local new_buf = vim.api.nvim_create_buf(true, true)  -- term buf
+        local win = new_vsplit()
+
+        local ret = user(buf_id, new_buf)
+        if ret == nil then
+            vim.api.nvim_win_set_buf(win, new_buf)
+            vim.api.nvim_win_call(win, function () vim.cmd.startinsert() end)
+            vim.api.nvim_buf_set_name(new_buf, 'IDE')
+            return { new_buf }
         else
-            return ret
+            return vsplit_term_buf(ret)(buf_id)
         end
     end
 end
