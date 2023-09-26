@@ -6,8 +6,7 @@ local classname = function (buf_id) return vim.api.nvim_buf_call(buf_id, functio
 local M = {}
 
 local python_with_version = function (v)
-    return { build = 'python' .. v .. ' -m py_compile %s'
-           , interpret = 'python' .. v .. ' %s'
+    return { interpret = 'python' .. v .. ' %s'
            , debug = 'python' .. v .. ' -m pdb %s'
            , repl = 'python' .. v
            , repl_loaded = 'python' .. v .. ' -i %s'
