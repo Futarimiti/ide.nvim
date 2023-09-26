@@ -31,6 +31,8 @@ M.from_user = function (user)
             vim.api.nvim_buf_call(new_buf, function () vim.fn.termopen(formatted) end)
             vim.cmd.vsplit()
             local win = vim.api.nvim_get_current_win()
+            vim.api.nvim_win_set_option(win, 'number', false)
+            vim.api.nvim_win_set_option(win, 'relativenumber', false)
             vim.api.nvim_win_set_buf(win, new_buf)
             vim.cmd.startinsert()
             return { new_buf }
