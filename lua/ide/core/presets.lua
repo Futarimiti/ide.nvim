@@ -1,23 +1,44 @@
 ---@diagnostic disable-next-line: redundant-return-value
-local classname = function (buf_id) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand '%:t:r:S' end) end
+local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
+local classname = function (buf_id) return expand(buf_id, '%:t:r:S') end
 
 ---@alias preset user-actions
 
 local M = {}
 
-M.racket = { interpret = 'racket %s'
-           , repl = 'racket'
-           , repl_loaded = function (this, new)
-                               -- not understanding what's exactly a module-path, but using the tail seems to work
-                               local filetail = vim.api.nvim_buf_call(this, function () return vim.fn.expand '%:p:t' end)
-                               local basedir = vim.api.nvim_buf_call(this, function () return vim.fn.expand '%:p:h:S' end)
-                               vim.api.nvim_buf_call(new, function ()
-                                                              vim.fn.termopen('cd '.. basedir .. '; racket')
-                                                              vim.cmd.startinsert()
-                                                              vim.api.nvim_input('(enter! "' .. filetail .. '")<CR>')
-                                                          end)
-                           end
+M.fennel = { interpret = 'fennel %s'
+           , repl = 'fennel --repl'
+           , repl_loaded = 'fennel --load %s'
            }
+
+M.scala = { interpret = 'scala %s'
+          , repl = 'scala'
+          , repl_loaded = function (this, new)
+                            local file = expand(this, '%')
+                            vim.api.nvim_buf_call(new, function ()
+                                 vim.fn.termopen('scala')
+                                 vim.cmd.startinsert()
+                                 vim.api.nvim_input(':load ' .. file .. '<CR>')
+                            end)
+                          end
+          }
+
+-- evcxr does not support loading files
+M.evcxr = { repl = 'evcxr' }
+
+M.cargo = { build = 'cargo build'
+          , run = 'cargo run'
+          , test = 'cargo test'
+          }
+
+M.xelatex = { repl = [[xelatex '\relax']]
+            , build = 'xelatex %s'
+            }
+
+M.latexmk = { build = 'latexmk -g %s'
+            , interpret = 'latexmk -pv %s'
+            , debug = 'latexmk -pvc %s'
+            }
 
 M.idris = { repl = 'idris'
           , repl_loaded = 'idris %s'
@@ -47,8 +68,29 @@ end
 -- example: python(3.12) --> { build = 'python3.12 -m py_compile %s', ... }
 ---@type preset
 M.python = python_with_version ''
-
 setmetatable(M.python, { __call = function (_, ver) return python_with_version(ver) end })
+
+local racket_with_lang = function (lang)
+  local lang_flag = lang and ' -I ' .. lang or ''
+  local racket = 'racket' .. lang_flag
+  return { interpret = racket .. ' %s'
+         , repl = racket .. ' -i'
+         , repl_loaded = function (this, new)
+             local pt = expand(this, '%:p:t')
+             local phS = expand(this, '%:p:h:S')
+             vim.api.nvim_buf_call(new, function ()
+               vim.fn.termopen('cd '.. phS .. '; ' .. racket .. ' -i')
+               vim.cmd.startinsert()
+               vim.api.nvim_input(',enter "' .. pt .. '"<CR>')
+             end)
+           end
+         }
+end
+
+-- You can also specify and pass in a racket language,
+-- e.g. 'racket', 'r5rs' or 'scheme', etc.
+M.racket = racket_with_lang(nil)
+setmetatable(M.racket, { __call = function (_, lang) return racket_with_lang(lang) end })
 
 M.lua = { interpret = 'lua %s'
         , build = function (id) return 'luac -o ' .. classname(id) .. ' %s' end
