@@ -31,9 +31,16 @@ M.cargo = { build = 'cargo build'
           , test = 'cargo test'
           }
 
-M.xelatex = { repl = [[xelatex '\relax']]
-            , build = 'xelatex %s'
-            }
+local tex = function (lang)
+  return { repl = lang .. [[ '\relax']]
+         , build = lang .. ' %s'
+         }
+end
+
+M.tex = tex 'tex'
+M.pdftex = tex 'pdftex'
+M.pdflatex = tex 'pdflatex'
+M.xelatex = tex 'xelatex'
 
 M.latexmk = { build = 'latexmk -g %s'
             , interpret = 'latexmk -pv %s'
