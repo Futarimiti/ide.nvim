@@ -65,7 +65,16 @@ M.from_user = function (user)
             vim.api.nvim_buf_set_name(new_buf, 'IDE')
             return { new_buf }
         else
-            return vsplit_term_buf(ret)(buf_id)
+            ---@cast ret string
+            local raw_cmd = ret
+            local filename = vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand '%:p:S' end)
+            local formatted_cmd = string.format(raw_cmd, filename)
+            local another_new_buf = vim.api.nvim_create_buf(true, true)
+            vim.api.nvim_buf_call(another_new_buf, function () vim.fn.termopen(formatted_cmd) end)
+            vim.api.nvim_win_set_buf(win, another_new_buf)
+            vim.api.nvim_win_call(win, function () vim.cmd.startinsert() end)
+            vim.api.nvim_buf_set_name(new_buf, 'IDE')
+            return { new_buf }
         end
     end
 end
