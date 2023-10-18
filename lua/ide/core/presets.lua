@@ -16,7 +16,7 @@ M.scala = { interpret = 'scala %s'
           , repl_loaded = function (this, new)
                             local file = expand(this, '%')
                             vim.api.nvim_buf_call(new, function ()
-                                 vim.fn.termopen('scala')
+                                 vim.fn.termopen 'scala'
                                  vim.cmd.startinsert()
                                  vim.api.nvim_input(':load ' .. file .. '<CR>')
                             end)
