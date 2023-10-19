@@ -6,6 +6,12 @@ local classname = function (buf_id) return expand(buf_id, '%:t:r:S') end
 
 local M = {}
 
+M.mojo = { interpret = 'mojo run %s'
+         , repl = 'mojo repl'
+         , build = 'mojo build %s'
+         , debug = 'mojo debug'
+         }
+
 M.fennel = { interpret = 'fennel %s'
            , repl = 'fennel --repl'
            , repl_loaded = 'fennel --load %s'
