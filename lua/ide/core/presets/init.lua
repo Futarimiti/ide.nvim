@@ -1,4 +1,3 @@
----@diagnostic disable-next-line: redundant-return-value
 local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
 local classname = function (buf_id) return expand(buf_id, '%:t:r:S') end
 
@@ -83,27 +82,10 @@ end
 M.python = python_with_version ''
 setmetatable(M.python, { __call = function (_, ver) return python_with_version(ver) end })
 
-local racket_with_lang = function (lang)
-  local lang_flag = lang and ' -I ' .. lang or ''
-  local racket = 'racket' .. lang_flag
-  return { interpret = racket .. ' %s'
-         , repl = racket .. ' -i'
-         , repl_loaded = function (this, new)
-             local pt = expand(this, '%:p:t')
-             local phS = expand(this, '%:p:h:S')
-             vim.api.nvim_buf_call(new, function ()
-               vim.fn.termopen('cd '.. phS .. '; ' .. racket .. ' -i')
-               vim.cmd.startinsert()
-               vim.api.nvim_input(',enter "' .. pt .. '"<CR>')
-             end)
-           end
-         }
-end
-
 -- You can also specify and pass in a racket language,
 -- e.g. 'racket', 'r5rs' or 'scheme', etc.
-M.racket = racket_with_lang(nil)
-setmetatable(M.racket, { __call = function (_, lang) return racket_with_lang(lang) end })
+-- Will look for the first '#lang' specification if none is provided.
+M.racket = require('ide.core.presets.racket').racket
 
 M.lua = { interpret = 'lua %s'
         , build = function (id) return 'luac -o ' .. classname(id) .. ' %s' end
