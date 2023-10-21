@@ -1,8 +1,8 @@
+local M = {}
+
 local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
 
----@alias preset user-actions
-
-local M = {}
+M.racket = require('ide.presets.racket').racket
 
 M.glow = { interpret = 'glow %s' }
 
@@ -77,32 +77,8 @@ M.idris2 = { repl = 'idris2'
            , repl_loaded = 'idris2 %s'
            }
 
-M.ptpython = { interpret = 'ptpython %s'
-             , repl = 'ptpython'
-             , repl_loaded = 'ptpython -i %s'
-             }
-
-local python_with_version = function (ver)
-    local v = ver and tostring(ver) or ''
-    return { interpret = 'python' .. v .. ' %s'
-           , debug = 'python' .. v .. ' -m pdb %s'
-           , repl = 'python' .. v
-           , repl_loaded = 'python' .. v .. ' -i %s'
-           }
-end
-
--- You can also pass in a number or a string, e.g. 3.12 or '3.12'
--- as the version of python you want to use,
--- using metatable magic.
--- example: python(3.12) --> { build = 'python3.12 -m py_compile %s', ... }
----@type preset
-M.python = python_with_version ''
-setmetatable(M.python, { __call = function (_, ver) return python_with_version(ver) end })
-
--- You can also specify and pass in a racket language,
--- e.g. 'racket', 'r5rs' or 'scheme', etc.
--- Will look for the first '#lang' specification if none is provided.
-M.racket = require('ide.core.presets.racket').racket
+M.ptpython = require('ide.presets.python').ptpython
+M.python = require('ide.presets.python').python
 
 M.lua = { interpret = 'lua %s'
         , build = 'luac %s'
@@ -110,22 +86,18 @@ M.lua = { interpret = 'lua %s'
         , repl_loaded = 'lua -i %s'
         }
 
-local java = require 'ide.core.presets.java'
+local java = require 'ide.presets.java'
 
 M.java = java.java
 M.java_preview = java.java_preview
 M.maven = java.maven
 
--- ghc for haskell (single file)
----@type preset
 M.ghc = { build = 'ghc --make %s'
         , interpret = 'runghc %s'
         , repl = 'ghci'
         , repl_loaded = 'ghci %s'
         }
 
--- cabal for haskell projects
----@type preset
 M.cabal = { build = 'cabal build'
           , run = 'cabal run'
           , exec = 'cabal exec'
