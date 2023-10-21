@@ -6,7 +6,6 @@ M.setup = function (raw)
   local action = require 'ide.action'
 
   local user = config.validate(raw)
-  print(vim.inspect(user))
 
   action.init_global(user)
   command.setup_commands(user)
