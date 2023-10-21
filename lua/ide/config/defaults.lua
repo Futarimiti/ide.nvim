@@ -11,6 +11,8 @@ local typecheck = function (config)
                , ['ui.startinsert'] = { config.ui.startinsert, 'boolean' }
                , ['ui.name'] = { config.ui.name, 'function' }
                , write = { config.write, 'table' }
+               , other_actions = { config.other_actions, 'table' }
+               , other_modes = { config.other_modes, 'table' }
                }
 end
 
@@ -29,6 +31,8 @@ local defaults = { setups = { single = {}  -- core of the plugin - explained fur
                         , name = function (_) return 'IDE term' end  -- how should I name the IDE terminal window, given the buf handle of the file you're editing?
                         }
                  , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test' }  -- the buffer will be written before these actions are run
+                 , other_actions = {}  -- if you feel like standard actions are not enough, add your own here!
+                 , other_modes = {}  -- ditto, though single and proj should suffice really
                  }
 
 assert(pcall(typecheck, defaults))

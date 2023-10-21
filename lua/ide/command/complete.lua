@@ -2,6 +2,12 @@ local M = {}
 
 M.gen_complete = function (user)
   local cmdname = user.command.name
+  local c = require 'ide.const'
+  local std_actions = c.std_actions
+  local other_actions = user.other_actions
+  local std_modes = c.std_modes
+  local other_modes = user.other_modes
+
   return function (_, line, _)
     local args = (function ()
       local trimmed_head, _ = line:gsub('^%s+', '')
@@ -14,11 +20,10 @@ M.gen_complete = function (user)
     local n = #args
     assert(n > 0)
 
-    local c = require 'ide.const'
     if n == 1 then
-      return c.std_actions
+      return vim.tbl_flatten { std_actions, other_actions }
     elseif n == 2 then
-      return c.std_modes
+      return vim.tbl_flatten { std_modes, other_modes }
     else
       return {}
     end
