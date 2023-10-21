@@ -4,8 +4,9 @@ local M = {}
 local global = {}
 
 M.init_global = function (user)
-  local convert_all = require('ide.action.convert').convert_all
-  global = convert_all(user, user.setups)
+  -- local convert_all = require('ide.action.convert').convert_all
+  -- global = convert_all(user, user.setups)
+  global = user.setups
 end
 
 M.put = function (mode, ft, action, procedure)

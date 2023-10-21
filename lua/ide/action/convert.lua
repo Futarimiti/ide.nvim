@@ -3,17 +3,26 @@
 -- 2. fun(buf) -> command string           -- evaluated then interpolated and used as a command string
 -- 3. fun(buf, dest-win)                   -- user can do whatever with the dest-win (note: ui.name will be overridden)
 -- where we'll convert to this form:
--- fun(buf, prev_win) -> win
-local convert = function (user_conf, user_action)
-  local startinsert = user_conf.ui.startinsert
-  local new = user_conf.ui.new
-  local name = user_conf.ui.name
+-- fun(buf, prev_win) -> { new_win, new_buf }
+local M = {}
 
-  return function (buf, prev_win)
+local unload = function (prev_win, buf)
     if prev_win and vim.api.nvim_win_is_valid(prev_win) then
       vim.api.nvim_win_close(prev_win, true)
     end
 
+    if buf and vim.api.nvim_buf_is_valid(buf) then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
+end
+
+M.convert = function (user_conf, user_action)
+  local startinsert = user_conf.ui.startinsert
+  local new = user_conf.ui.new
+  local name = user_conf.ui.name
+
+  return function (buf, prev_win, prev_buf)
+    unload(prev_win, prev_buf)
     local ide_win = new()
     local ide_buf = vim.api.nvim_create_buf(true, true)
     vim.api.nvim_win_set_buf(ide_win, ide_buf)
@@ -30,27 +39,25 @@ local convert = function (user_conf, user_action)
         local formatted_cmd = string.format(result, filename)
         vim.api.nvim_buf_call(ide_buf, function () vim.fn.termopen(formatted_cmd) end)
       else
-        return
+        return { ide_win, ide_buf }
       end
     end
 
     vim.api.nvim_buf_set_name(vim.api.nvim_win_get_buf(ide_win), name(buf))
 
     if startinsert then vim.api.nvim_win_call(ide_win, vim.cmd.startinsert) end
-    return ide_win
+    return { ide_win, ide_buf }
   end
 end
 
-local M = {}
-
-M.convert_all = function (user_conf, setups)
-  return vim.tbl_map(function (modes)
-      return vim.tbl_map(function (ft)
-        return vim.tbl_map(function (user_action)
-          return convert(user_conf, user_action)
-        end, ft)
-      end, modes)
-    end, setups)
-end
+-- M.convert_all = function (user_conf, setups)
+--   return vim.tbl_map(function (modes)
+--       return vim.tbl_map(function (ft)
+--         return vim.tbl_map(function (user_action)
+--           return convert(user_conf, user_action)
+--         end, ft)
+--       end, modes)
+--     end, setups)
+-- end
 
 return M
