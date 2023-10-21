@@ -1,5 +1,4 @@
 local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
-local classname = function (buf_id) return expand(buf_id, '%:t:r:S') end
 
 ---@alias preset user-actions
 
@@ -106,7 +105,7 @@ setmetatable(M.python, { __call = function (_, ver) return python_with_version(v
 M.racket = require('ide.core.presets.racket').racket
 
 M.lua = { interpret = 'lua %s'
-        , build = function (id) return 'luac -o ' .. classname(id) .. ' %s' end
+        , build = 'luac %s'
         , repl = 'lua'
         , repl_loaded = 'lua -i %s'
         }
