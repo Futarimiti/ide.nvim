@@ -5,6 +5,16 @@ local classname = function (buf_id) return expand(buf_id, '%:t:r:S') end
 
 local M = {}
 
+local chez = function (cmd)
+  return { interpret = cmd .. ' --script %s'
+         , repl_loaded = cmd .. ' %s'
+         , repl = cmd
+         }
+end
+
+M.chez_scheme = chez 'scheme'
+M.chez_petite = chez 'petite'
+
 M.mojo = { interpret = 'mojo run %s'
          , repl = 'mojo repl'
          , build = 'mojo build %s'
