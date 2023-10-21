@@ -7,7 +7,7 @@ M.java = { build = 'javac %s'
          , interpret = 'java %s'
          , debug = function (id) return 'jdb ' .. classname(id) end
          , repl = 'jshell'
-         , repl_loaded = 'jshell %s'
+         , repl_loaded = 'jshell --startup %s'
          }
 
 M.maven = { build = 'mvn compile'
@@ -22,7 +22,7 @@ local java_preview_version = function (version)
   { build = ver and 'javac --enable-preview --release ' .. ver .. ' %s' or nil
   , interpret = ver and 'java --enable-preview --source ' .. ver .. ' %s' or nil
   , repl = 'jshell --enable-preview'
-  , repl_loaded = 'jshell --enable-preview %s'
+  , repl_loaded = 'jshell --enable-preview --startup %s'
   }
 end
 
