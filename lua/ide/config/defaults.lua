@@ -10,6 +10,7 @@ local typecheck = function (config)
                , ['ui.new'] = { config.ui.new, 'function' }
                , ['ui.startinsert'] = { config.ui.startinsert, 'boolean' }
                , ['ui.name'] = { config.ui.name, 'function' }
+               , write = { config.write, 'table' }
                }
 end
 
@@ -27,6 +28,7 @@ local defaults = { setups = { single = {}
                         , startinsert = true
                         , name = function (_) return 'IDE term' end
                         }
+                 , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test' }
                  }
 
 assert(pcall(typecheck, defaults))

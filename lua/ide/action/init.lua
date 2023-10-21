@@ -8,7 +8,7 @@ M.init_global = init_global
 local prev_ide_win = nil
 
 -- stolen from SICP ;)
-M.operate = function (win, mode, action)
+M.operate = function (user, win, mode, action)
   local buf = vim.api.nvim_win_get_buf(win)
   assert(buf, 'No buffer found within current window')
 
@@ -17,6 +17,10 @@ M.operate = function (win, mode, action)
 
   local procedure = get(mode, ft, action)
   assert(procedure, string.format('No procedure found: %s, %s, %s', mode, ft, action))
+
+  if vim.tbl_contains(user.write, action) then
+    vim.api.nvim_buf_call(buf, vim.cmd.update)
+  end
 
   prev_ide_win = procedure(buf, prev_ide_win)
 end

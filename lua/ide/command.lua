@@ -9,7 +9,7 @@ M.setup_commands = function (user)
     local win = vim.api.nvim_get_current_win()
     local action = args.fargs[1]
     local mode = args.fargs[2]
-    require('ide.action').operate(win, mode, action)
+    require('ide.action').operate(user, win, mode, action)
   end, { nargs = '+' })
 end
 
