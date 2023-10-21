@@ -14,21 +14,21 @@ local typecheck = function (config)
                }
 end
 
-local defaults = { setups = { single = {}
+local defaults = { setups = { single = {}  -- core of the plugin - explained further in readme
                             , proj = {}
                             }
-                 , quiet = false
-                 , command = { enable = true
-                             , name = 'IDE'
+                 , quiet = false  -- UNUSED
+                 , command = { enable = true  -- enable the command?
+                             , name = 'IDE'  -- command name in one word; malformed command names may break things
                              }
-                 , ui = { new = function ()
-                                  vim.cmd.vsplit()
-                                  return vim.api.nvim_get_current_win()
+                 , ui = { new = function ()  -- how would you like to bring up a new IDE terminal window?
+                                  vim.cmd.vsplit()  -- default: vsplit
+                                  return vim.api.nvim_get_current_win()  -- return window handle after you finish
                                 end
-                        , startinsert = true
-                        , name = function (_) return 'IDE term' end
+                        , startinsert = true  -- enter insert mode after opening a new IDE terminal window?
+                        , name = function (_) return 'IDE term' end  -- how should I name the IDE terminal window, given the buf handle of the file you're editing?
                         }
-                 , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test' }
+                 , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test' }  -- the buffer will be written before these actions are run
                  }
 
 assert(pcall(typecheck, defaults))
