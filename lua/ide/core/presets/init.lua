@@ -110,21 +110,11 @@ M.lua = { interpret = 'lua %s'
         , repl_loaded = 'lua -i %s'
         }
 
--- single java file
----@type preset
-M.java = { build = 'javac %s'
-         , interpret = 'java %s'
-         , debug = function (id) return 'jdb ' .. classname(id) end
-         , repl = 'jshell'
-         , repl_loaded = 'jshell %s'
-         }
+local java = require 'ide.core.presets.java'
 
--- maven for java projects
----@type preset
-M.maven = { build = 'mvn compile'
-          , run = 'mvn exec:java'
-          , test = 'mvn test'
-          }
+M.java = java.java
+M.java_preview = java.java_preview
+M.maven = java.maven
 
 -- ghc for haskell (single file)
 ---@type preset
