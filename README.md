@@ -4,9 +4,9 @@ Provides basic filetype-specific IDE support
 
 ## Functionalities
 
-- [x] Can manually specify which programmes to be used for building, interpreting, debugging (e.g. REPL), testing, etc.
+- [x] Can manually specify which programmes to be used for building, interpreting, debugging, REPL, testing, etc.
 - [x] Provides sensible presets for some languages
-- [ ] Exports a module `ide.actions` with functionalities as functions for easier command/keymaps setup
+- [x] Exports a module `ide.actions` with functionalities as functions for easier command/keymaps setup
 - [x] Provides command `IDE` 
     - [ ] add argument completion
 
