@@ -30,6 +30,10 @@ M.fennel = { interpret = 'fennel %s'
            , repl_loaded = 'fennel --load %s'
            }
 
+M.rlwrap_fennel = { repl = 'rlwrap fennel --repl'
+                  , repl_loaded = 'rlwrap fennel --load %s'
+                  }
+
 M.scala = { interpret = 'scala %s'
           , repl = 'scala'
           , repl_loaded = function (this, new)
