@@ -73,7 +73,7 @@ If you feel like these are not enough,
 use option `other_modes` and `other_actions` to add more!
 
 Some sensible presets are provided for some languages/implementations,
-available [here](lua/presets/). You can use them like this:
+available [here](lua/ide/presets/). You can use them like this:
 
 ```lua
 local p = require 'ide.presets'
