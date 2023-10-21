@@ -8,7 +8,7 @@ Provides basic filetype-specific IDE support
 - [x] Provides sensible presets for some languages
 - [x] Exports a module `ide.user` with functionalities as functions for easier command/keymaps setup
 - [x] Provides command `IDE` 
-    - [ ] add argument completion
+    - [x] Argument completion
 
 ## Won't do
 
