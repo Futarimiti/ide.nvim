@@ -5,6 +5,10 @@ local classname = function (buf_id) return expand(buf_id, '%:t:r:S') end
 
 local M = {}
 
+M.glow = { interpret = 'glow %s' }
+
+M.mdless = { interpret = 'mdless %s' }
+
 local chez = function (cmd)
   return { interpret = cmd .. ' --script %s'
          , repl_loaded = cmd .. ' %s'
