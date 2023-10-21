@@ -129,7 +129,7 @@ M.maven = { build = 'mvn compile'
 -- ghc for haskell (single file)
 ---@type preset
 M.ghc = { build = 'ghc --make %s'
-        , interpret = 'runhaskell %s'
+        , interpret = 'runghc %s'
         , repl = 'ghci'
         , repl_loaded = 'ghci %s'
         }
