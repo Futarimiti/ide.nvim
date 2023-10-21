@@ -11,8 +11,6 @@ M.gen_complete = function (user)
       return l
     end)()
 
-    print('args: ' .. vim.inspect(args))
-
     local n = #args
     assert(n > 0)
 
