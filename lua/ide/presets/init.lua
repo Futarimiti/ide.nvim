@@ -6,7 +6,7 @@ M.racket = require('ide.presets.racket').racket
 
 M.glow = { interpret = 'glow %s' }
 
-M.mdless = { interpret = 'mdless %s' }
+M.mdless = { interpret = 'mdless -P %s 2> /dev/null' }
 
 local chez = function (cmd)
   return { interpret = cmd .. ' --script %s'
