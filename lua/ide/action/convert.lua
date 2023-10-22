@@ -23,7 +23,7 @@ M.convert = function (user_conf, user_action)
 
   return function (buf, prev_win, prev_buf)
     unload(prev_win, prev_buf)
-    local ide_win = new()
+    local ide_win = assert(new(), 'ui.new must return a window handle')
     local ide_buf = vim.api.nvim_create_buf(true, true)
     vim.api.nvim_win_set_buf(ide_win, ide_buf)
 
