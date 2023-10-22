@@ -10,7 +10,7 @@ M.gen_complete = function (user)
 
   return function (_, line, _)
     local args = (function ()
-      local trimmed_head, _ = line:gsub('^%s+', '')
+      local trimmed_head, _ = line:gsub('^[%s:%|]+', '')
       local l = vim.split(trimmed_head, '%s+')
       assert(l[1] and l[1] ~= '' and cmdname:match('^' .. l[1] .. '.*$'))
       table.remove(l, 1)
