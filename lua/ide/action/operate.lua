@@ -5,10 +5,21 @@ local prev_ide_win = nil
 local prev_ide_buf = nil
 
 -- stolen from SICP ;)
-local op = function (buf, mode, action)
+local op = function (user, buf, mode, action)
+  local notify = function (...)
+    if user.quiet then return end
+    vim.notify(...)
+  end
+
   assert(buf, 'No buffer found within current window')
 
-  local ft = vim.filetype.match { buf = buf }
+  local ft = (function ()
+    local buf_ft = vim.api.nvim_buf_get_option(buf, 'filetype')
+    if buf_ft ~= '' then return buf_ft end
+    notify('[ide] Cannot find filetype for current buffer, trying to detect', vim.log.levels.INFO)
+    local detected, _ = vim.filetype.match { buf = buf }
+    return detected
+  end)()
   assert(ft, 'Cannot detect filetype for current buffer')
 
   local procedure = get(mode, ft, action)
@@ -19,7 +30,7 @@ end
 
 M.operate = function (user, win, mode, action)
   local buf = vim.api.nvim_win_get_buf(win)
-  local procedure = op(buf, mode, action)
+  local procedure = op(user, buf, mode, action)
 
   if vim.tbl_contains(user.write, action) then
     vim.api.nvim_buf_call(buf, vim.cmd.update)

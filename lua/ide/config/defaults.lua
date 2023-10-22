@@ -19,7 +19,7 @@ end
 local defaults = { setups = { single = {}  -- core of the plugin - explained further in readme
                             , proj = {}
                             }
-                 , quiet = false  -- UNUSED
+                 , quiet = false  -- suppress log notifications?
                  , command = { enable = true  -- enable the command?
                              , name = 'IDE'  -- command name in one word; malformed command names may break things
                              }
