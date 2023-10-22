@@ -159,7 +159,10 @@ end
 
 ## Contribution
 
-This plugin is its very early stage
-so do expect unstable changes and breaking changes.
+I wrote this like just yesterday
+so do expect it to break
+as well as breaking changes
+without preannouncements.
+
 Any suggestions or issues, just open an issue or a PR
 and we will get to work ASAP.
