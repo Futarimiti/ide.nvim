@@ -4,8 +4,6 @@ local M = {}
 local global = {}
 
 M.init_global = function (user)
-  -- local convert_all = require('ide.action.convert').convert_all
-  -- global = convert_all(user, user.setups)
   global = user.setups
 end
 
@@ -20,14 +18,7 @@ M.put = function (mode, ft, action, procedure)
 end
 
 M.get = function (mode, ft, action)
-  local g_mode = global[mode]
-  if g_mode then
-    local g_ft = g_mode[ft]
-    if g_ft then
-      return g_ft[action]
-    end
-  end
-  return nil
+  return vim.tbl_get(global, mode, ft, action)
 end
 
 return M

@@ -7,13 +7,13 @@
 local M = {}
 
 local unload = function (prev_win, buf)
-    if prev_win and vim.api.nvim_win_is_valid(prev_win) then
-      vim.api.nvim_win_close(prev_win, true)
-    end
+  if prev_win and vim.api.nvim_win_is_valid(prev_win) then
+    vim.api.nvim_win_close(prev_win, true)
+  end
 
-    if buf and vim.api.nvim_buf_is_valid(buf) then
-      vim.api.nvim_buf_delete(buf, { force = true })
-    end
+  if buf and vim.api.nvim_buf_is_valid(buf) then
+    vim.api.nvim_buf_delete(buf, { force = true })
+  end
 end
 
 M.convert = function (user_conf, user_action)
@@ -49,15 +49,5 @@ M.convert = function (user_conf, user_action)
     return { ide_win, ide_buf }
   end
 end
-
--- M.convert_all = function (user_conf, setups)
---   return vim.tbl_map(function (modes)
---       return vim.tbl_map(function (ft)
---         return vim.tbl_map(function (user_action)
---           return convert(user_conf, user_action)
---         end, ft)
---       end, modes)
---     end, setups)
--- end
 
 return M
