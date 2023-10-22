@@ -78,15 +78,16 @@ available [here](lua/ide/presets/). You can use them like this:
 ```lua
 local p = require 'ide.presets'
 
-{ single = { java = p.java_preview(21)  -- some presets have callable metatables
-           , python = { interpret = p.python(3.12).interpret
-                      , repl = p.ptpython.repl
-                      , repl_loaded = p.ptpython.repl_loaded
-                      }  -- you can mix up different presets!
-           }
-, proj = { java = p.maven
-         , haskell = p.cabal
-         }
+require('ide').setup { setups = { single = { java = p.java_preview(21)  -- some presets have callable metatables
+                                           , python = { interpret = p.python(3.12).interpret
+                                                      , repl = p.ptpython.repl
+                                                      , repl_loaded = p.ptpython.repl_loaded
+                                                      }  -- you can mix up different presets!
+                                           }
+                                , proj = { java = p.maven
+                                         , haskell = p.cabal
+                                         }
+                                }
 }
 ```
 
@@ -154,7 +155,7 @@ local repl_loaded = function (buf, win)
     end)
 end
 
-{ single = { racket = { repl_loaded = repl_loaded } } }
+require('ide').setup { setups = { single = { racket = { repl_loaded = repl_loaded } } } }
 ```
 
 ## Contribution
