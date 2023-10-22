@@ -13,6 +13,8 @@ local typecheck = function (config)
                , write = { config.write, 'table' }
                , other_actions = { config.other_actions, 'table' }
                , other_modes = { config.other_modes, 'table' }
+               , filetype = { config.filetype, 'table' }
+               , ['filetype.detect'] = { config.filetype.detect, 'boolean' }
                }
 end
 
