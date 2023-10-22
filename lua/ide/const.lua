@@ -8,6 +8,7 @@ M.std_actions = { 'build'  -- build current file/project
                 , 'repl'  -- open a REPL for the current file/project
                 , 'repl_loaded'  -- open a REPL loading current file/project
                 , 'test'  -- run tests on current file/project
+                , 'typecheck'  -- typecheck current file/project without running
                 }
 
 M.std_modes = { 'single', 'proj' }

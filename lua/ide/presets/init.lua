@@ -71,10 +71,13 @@ M.latexmk = { build = 'latexmk -g %s'
 
 M.idris = { repl = 'idris'
           , repl_loaded = 'idris %s'
+          , interpret = 'idris --execute %s'
+          , typecheck = 'idris --check %s'
           }
 
 M.idris2 = { repl = 'idris2'
            , repl_loaded = 'idris2 %s'
+           , typecheck = 'idris2 --check %s'
            }
 
 M.ptpython = require('ide.presets.python').ptpython

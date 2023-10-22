@@ -30,7 +30,7 @@ local defaults = { setups = { single = {}  -- core of the plugin - explained fur
                         , startinsert = true  -- enter insert mode after opening a new IDE terminal window?
                         , name = function (_) return 'IDE term' end  -- how should I name the IDE terminal window, given the buf handle of the file you're editing?
                         }
-                 , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test' }  -- the buffer will be written before these actions are run
+                 , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test', 'typecheck' }  -- the buffer will be written before these actions are run
                  , other_actions = {}  -- if you feel like standard actions are not enough, add your own here!
                  , other_modes = {}  -- ditto, though single and proj should suffice really
                  }
