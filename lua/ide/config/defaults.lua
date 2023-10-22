@@ -33,6 +33,7 @@ local defaults = { setups = { single = {}  -- core of the plugin - explained fur
                  , write = { 'interpret', 'debug', 'run', 'build', 'repl_loaded', 'test', 'typecheck' }  -- the buffer will be written before these actions are run
                  , other_actions = {}  -- if you feel like standard actions are not enough, add your own here!
                  , other_modes = {}  -- ditto, though single and proj should suffice really
+                 , filetype = { detect = true }  -- allow ide to detect filetype when it's not set
                  }
 
 assert(pcall(typecheck, defaults))

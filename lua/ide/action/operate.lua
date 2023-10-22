@@ -16,8 +16,11 @@ local op = function (user, buf, mode, action)
   local ft = (function ()
     local buf_ft = vim.api.nvim_buf_get_option(buf, 'filetype')
     if buf_ft ~= '' then return buf_ft end
-    notify('[ide] Cannot find filetype for current buffer, trying to detect', vim.log.levels.INFO)
+    if not user.filetype.detect then return end
     local detected, _ = vim.filetype.match { buf = buf }
+    if detected then
+      notify('[ide] Detected filetype: ' .. detected, vim.log.levels.INFO)
+    end
     return detected
   end)()
   assert(ft, 'Cannot detect filetype for current buffer')
