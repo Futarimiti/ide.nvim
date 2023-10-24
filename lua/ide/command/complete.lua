@@ -9,20 +9,16 @@ M.gen_complete = function (user)
   local other_modes = user.other_modes
 
   return function (_, line, _)
-    local args = (function ()
-      local trimmed_head, _ = line:gsub('^[%s:%|]+', '')
-      local l = vim.split(trimmed_head, '%s+')
-      assert(l[1] and l[1] ~= '' and cmdname:match('^' .. l[1] .. '.*$'))
-      table.remove(l, 1)
-      return l
-    end)()
+    local parsed = vim.api.nvim_parse_cmd(line, {})
+    local cmd = parsed.cmd
+    assert(cmd and cmd ~= '' and cmdname:match('^' .. cmd .. '.*$'))
 
-    local n = #args
-    assert(n > 0)
+    local n = #parsed.args
+    assert(n >= 0)
 
-    if n == 1 then
+    if n == 0 then
       return vim.tbl_flatten { std_actions, other_actions }
-    elseif n == 2 then
+    elseif n == 1 then
       return vim.tbl_flatten { std_modes, other_modes }
     else
       return {}
