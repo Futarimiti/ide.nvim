@@ -1,5 +1,11 @@
 local M = {}
 
+-- where prefix must not be ''
+local is_prefix = function (prefix, str)
+  local i, _ = string.find(str, prefix, 1, true)
+  return i == 1
+end
+
 M.gen_complete = function (user)
   local cmdname = user.command.name
   local c = require 'ide.const'
@@ -11,7 +17,7 @@ M.gen_complete = function (user)
   return function (_, line, _)
     local parsed = vim.api.nvim_parse_cmd(line, {})
     local cmd = parsed.cmd
-    assert(cmd and cmd ~= '' and cmdname:match('^' .. cmd .. '.*$'))
+    assert(cmd and is_prefix(cmdname, cmd))
 
     local n = #parsed.args
     assert(n >= 0)
