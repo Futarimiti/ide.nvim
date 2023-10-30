@@ -75,10 +75,20 @@ M.idris = { repl = 'idris'
           , typecheck = 'idris --check %s'
           }
 
+M.idris_no_banner = { repl = 'idris --nobanner'
+                    , repl_loaded = 'idris --nobanner %s'
+                    , typecheck = 'idris --check %s'
+                    }
+
 M.idris2 = { repl = 'idris2'
            , repl_loaded = 'idris2 %s'
            , typecheck = 'idris2 --check %s'
            }
+
+M.idris2_no_banner = { repl = 'idris2 --nobanner'
+                     , repl_loaded = 'idris2 --nobanner %s'
+                     , typecheck = 'idris2 --check %s'
+                     }
 
 M.ptpython = require('ide.presets.python').ptpython
 M.python = require('ide.presets.python').python
