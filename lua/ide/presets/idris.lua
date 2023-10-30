@@ -12,7 +12,7 @@ end
 
 local _idris2 = function (rlwrap, banner)
   local r = rlwrap and 'rlwrap' or ''
-  local b = banner and '' or '--nobanner'
+  local b = banner and '' or '--no-banner'
   return
     { repl = r .. ' idris2 ' .. b
     , repl_loaded = r .. ' idris2 ' .. b .. ' %s'
