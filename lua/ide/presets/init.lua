@@ -2,6 +2,11 @@ local M = {}
 
 local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
 
+M.swi_prolog = { interpret = 'swipl %s'
+               , repl = 'swipl'
+               , repl_loaded = 'swipl %s'
+               }
+
 M.racket = require('ide.presets.racket').racket
 
 M.glow = { interpret = 'glow %s' }
