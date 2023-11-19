@@ -4,6 +4,9 @@ Basic framework for basic IDE support
 
 ## Functionalities
 
+In action:
+![ezgif-4-cf0c927b1e](https://github.com/Futarimiti/ide.nvim/assets/96031125/83415945-412c-4dd9-a804-8dd1c3be6ffb)
+
 - [x] Manually, or use presets, specify which programmes to be used for building, interpreting, debugging, REPL, testing, etc.
 - [x] Provides sensible presets for some languages
 - [x] Exports utility module for easier command/keymaps setup
