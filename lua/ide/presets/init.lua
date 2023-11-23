@@ -2,6 +2,13 @@ local M = {}
 
 local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
 
+M.spago = { build = 'spago build'
+          , repl = 'spago repl --deps-only'
+          , repl_loaded = 'spago repl'
+          , test = 'spago test'
+          , run = 'spago run'
+          }
+
 M.swi_prolog = { interpret = 'swipl %s'
                , repl = 'swipl'
                , repl_loaded = 'swipl %s'
