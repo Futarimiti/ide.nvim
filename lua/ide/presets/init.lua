@@ -63,6 +63,7 @@ M.evcxr = { repl = 'evcxr' }
 M.cargo = { build = 'cargo build'
           , run = 'cargo run'
           , test = 'cargo test'
+          , typecheck = 'cargo check'
           }
 
 local tex = function (lang)
