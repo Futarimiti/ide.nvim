@@ -1,7 +1,5 @@
 local M = {}
 
-local expand = function (buf_id, pat) return vim.api.nvim_buf_call(buf_id, function () return vim.fn.expand(pat) end) end
-
 M.spago = { build = 'spago build'
           , repl = 'spago repl --deps-only'
           , repl_loaded = 'spago repl'
@@ -45,17 +43,8 @@ M.rlwrap_fennel = { repl = 'rlwrap fennel --repl'
                   , repl_loaded = 'rlwrap fennel --load %s'
                   }
 
-M.scala = { interpret = 'scala %s'
-          , repl = 'scala'
-          , repl_loaded = function (this, new)
-                            local file = expand(this, '%')
-                            vim.api.nvim_buf_call(new, function ()
-                                 vim.fn.termopen 'scala'
-                                 vim.cmd.startinsert()
-                                 vim.api.nvim_input(':load ' .. file .. '<CR>')
-                            end)
-                          end
-          }
+M.scala = require('ide.presets.scala').scala
+M.sbt = require('ide.presets.scala').sbt
 
 -- evcxr does not support loading files
 M.evcxr = { repl = 'evcxr' }
