@@ -7,11 +7,11 @@ Basic framework for basic IDE support
 In action:
 ![ezgif-4-cf0c927b1e](https://github.com/Futarimiti/ide.nvim/assets/96031125/83415945-412c-4dd9-a804-8dd1c3be6ffb)
 
-- [x] Manually, or use presets, specify which programmes to be used for building, interpreting, debugging, REPL, testing, etc.
-- [x] Provides sensible presets for some languages
-- [x] Exports utility module for easier command/keymaps setup
-- [x] Provides command
-    - [x] Argument completion
+*   \[x] Manually, or use presets, specify which programmes to be used for building, interpreting, debugging, REPL, testing, etc.
+*   \[x] Provides sensible presets for some languages
+*   \[x] Exports utility module for easier command/keymaps setup
+*   \[x] Provides command
+    *   \[x] Argument completion
 
 ## Installation
 
@@ -129,11 +129,11 @@ A string command is apparently not enough; a function can be used instead.
 
 When used as a function, one of the following scheme should be adopted:
 
-* `fun(buf): cmd` where
+*   `fun(buf): cmd` where
     `buf` is the buffer number of the current buffer
     and `cmd` is a string command to be executed
     (where `'%s'` may still be used to represent the file name)
-* `fun(buf, win)` where
+*   `fun(buf, win)` where
     `buf` is the buffer number of the current buffer
     and `win` is the window number of the new IDE terminal window,
     on which you may run commands like `nvim_win_set_buf`
@@ -144,8 +144,8 @@ Therefore we can do something like this:
 
 ```lua
 local repl_loaded = function (buf, win)
-  local pt = vim.fn.expand(this, '%:p:t')
-  local phS = vim.fn.expand(this, '%:p:h:S')
+  local pt = vim.fn.expand(buf, '%:p:t')
+  local phS = vim.fn.expand(buf, '%:p:h:S')
   vim.api.nvim_win_call(win, function ()
     vim.fn.termopen('cd '.. phS .. '; racket -i')
     vim.cmd.startinsert()
