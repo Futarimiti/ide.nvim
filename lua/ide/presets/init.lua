@@ -90,17 +90,8 @@ M.java = java.java
 M.java_preview = java.java_preview
 M.maven = java.maven
 
-M.ghc = { build = 'ghc --make %s'
-        , interpret = 'runghc %s'
-        , repl = 'ghci'
-        , repl_loaded = 'ghci %s'
-        }
-
-M.cabal = { build = 'cabal build'
-          , run = 'cabal run'
-          , exec = 'cabal exec'
-          , repl_loaded = 'cabal repl'
-          , test = 'cabal test'
-          }
+M.ghc = require('ide.presets.haskell').ghc
+M.cabal = require('ide.presets.haskell').cabal
+M.stack = require('ide.presets.haskell').stack
 
 return M
